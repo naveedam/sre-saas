@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRE SaaS — Client Assessment</title>
+<style>
+:root{--bg:#f4f6fa;--panel:#fff;--ink:#182230;--muted:#667085;--line:#e3e8ef;--blue:#315efb;--blue2:#edf2ff;--green:#087f5b;--amber:#9a6700;--shadow:0 8px 28px rgba(16,24,40,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#101828;color:#fff;padding:28px max(22px,calc((100% - 1040px)/2))}header .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#aebeff;font-weight:800}h1{margin:8px 0;font-size:30px;letter-spacing:-.04em}header p{margin:0;color:#c7d0df;max-width:740px}
+main{max-width:1040px;margin:24px auto;padding:0 18px 44px}.intro{background:var(--blue2);border:1px solid #d9e2ff;border-radius:14px;padding:15px 18px;margin-bottom:18px;color:#273b80}
+.progress-wrap{display:flex;align-items:center;gap:12px;margin:14px 0 20px;color:var(--muted);font-size:13px}.progress{height:7px;background:#e3e8ef;border-radius:99px;flex:1;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}
+section{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}.section-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}.num{background:var(--blue2);color:var(--blue);font-weight:800;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}.section-head h2{font-size:18px;margin:0 0 3px}.section-head p{margin:0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label,.label{font-size:13px;font-weight:700;color:#344054}.hint{font-size:12px;color:var(--muted);font-weight:400}
+input,select,textarea{width:100%;border:1px solid #d0d5dd;border-radius:9px;background:#fff;color:var(--ink);padding:11px 12px;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #315efb1c}textarea{min-height:90px;resize:vertical}
+.options{display:flex;flex-wrap:wrap;gap:8px}.choice{position:relative}.choice input{position:absolute;opacity:0;pointer-events:none}.choice span{display:inline-flex;align-items:center;border:1px solid #d0d5dd;border-radius:9px;padding:9px 11px;font-size:13px;cursor:pointer;background:#fff}.choice input:checked+span{border-color:var(--blue);background:var(--blue2);color:#2349d8;font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn{border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:750;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--ink)}.note{font-size:12px;color:var(--muted);margin-top:12px}.status{margin-top:14px;padding:12px 14px;border-radius:10px;background:#ecfdf3;color:var(--green);display:none}
+@media(max-width:650px){.grid{grid-template-columns:1fr}header{padding:24px 20px}h1{font-size:26px}section{padding:17px}}
+@media print{body{background:#fff}header{background:#fff;color:#111;padding:12px 0}header p{color:#444}main{padding:0;margin:0;max-width:none}.intro,.progress-wrap,.actions,.note{display:none!important}section{box-shadow:none;break-inside:avoid;padding:12px;margin-bottom:8px}.field{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">SRE SaaS · Discovery</div>
+  <h1>Client Reliability Assessment</h1>
+  <p>A structured conversation to understand your production environment, incident workflow and reliability priorities before we recommend a solution.</p>
+</header>
+<main>
+  <div class="intro"><strong>How to use this:</strong> Complete this with the client in a 25–35 minute discovery conversation. Answers are kept in this browser page; use “Export answers” to download a local copy. Do not enter passwords, API keys, secrets or sensitive production data.</div>
+  <div class="progress-wrap"><span id="progressText">0% complete</span><div class="progress"><span id="progressBar"></span></div><span>Discovery form</span></div>
+  <form id="assessment">
+    <section>
+      <div class="section-head"><div class="num">01</div><div><h2>Company and business context</h2><p>Who is the customer, and what does reliability mean to their business?</p></div></div>
+      <div class="grid">
+        <div class="field"><label for="company">Company name</label><input id="company" name="Company name" placeholder="Company / product name"></div>
+        <div class="field"><label for="contact">Primary contact and role</label><input id="contact" name="Primary contact" placeholder="CTO, VP Engineering, platform lead…"></div>
+        <div class="field"><label for="website">Website / product</label><input id="website" name="Website / product" placeholder="https://"></div>
+        <div class="field"><label for="size">Engineering team size</label><select id="size" name="Engineering team size"><option value="">Select range</option><option>1–5</option><option>6–15</option><option>16–50</option><option>51–100</option><option>100+</option></select></div>
+        <div class="field"><label for="industry">Industry / customer segment</label><input id="industry" name="Industry" placeholder="B2B SaaS, fintech, ecommerce…"></div>
+        <div class="field"><label for="criticality">Business criticality of the application</label><select id="criticality" name="Business criticality"><option value="">Select</option><option>Business-critical / revenue directly affected</option><option>Important internal or customer-facing service</option><option>Non-critical / best-effort</option></select></div>
+        <div class="field full"><label for="businessimpact">What happens to the business when the service is down?</label><textarea id="businessimpact" name="Business impact" placeholder="Lost transactions, customer churn, SLA penalties, staff disruption…"></textarea></div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head"><div class="num">02</div><div><h2>Current technology and observability</h2><p>Map the existing stack before proposing new integrations.</p></div></div>
+      <div class="field">
+        <span class="label">Cloud / runtime environment <span class="hint">Select all that apply</span></span>
+        <div class="options">
+          <label class="choice"><input type="checkbox" name="Environment" value="AWS"><span>AWS</span></label><label class="choice"><input type="checkbox" name="Environment" value="Azure"><span>Azure</span></label><label class="choice"><input type="checkbox" name="Environment" value="GCP"><span>GCP</span></label><label class="choice"><input type="checkbox" name="Environment" value="Kubernetes"><span>Kubernetes</span></label><label class="choice"><input type="checkbox" name="Environment" value="Vercel / serverless"><span>Vercel / serverless</span></label><label class="choice"><input type="checkbox" name="Environment" value="On-prem / hybrid"><span>On-prem / hybrid</span></label><label class="choice"><input type="checkbox" name="Environment" value="Other"><span>Other</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <span class="label">Observability and engineering tools <span class="hint">Select all that apply</span></span>
+        <div class="options">
+          <label class="choice"><input type="checkbox" name="Tools" value="Datadog"><span>Datadog</span></label><label class="choice"><input type="checkbox" name="Tools" value="Grafana / Prometheus"><span>Grafana / Prometheus</span></label><label class="choice"><input type="checkbox" name="Tools" value="New Relic"><span>New Relic</span></label><label class="choice"><input type="checkbox" name="Tools" value="Sentry"><span>Sentry</span></label><label class="choice"><input type="checkbox" name="Tools" value="OpenTelemetry"><span>OpenTelemetry</span></label><label class="choice"><input type="checkbox" name="Tools" value="Cloud-native monitoring"><span>Cloud-native monitoring</span></label><label class="choice"><input type="checkbox" name="Tools" value="PagerDuty / incident management"><span>PagerDuty / incident management</span></label><label class="choice"><input type="checkbox" name="Tools" value="Other / unknown"><span>Other / unknown</span></label>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:16px">
+        <div class="field"><label for="deploy">Deployment / CI/CD tooling</label><input id="deploy" name="Deployment / CI-CD" placeholder="GitHub Actions, GitLab, CircleCI…"></div>
+        <div class="field"><label for="services">Number of production services</label><select id="services" name="Production services"><option value="">Select range</option><option>1–5</option><option>6–20</option><option>21–50</option><option>51–100</option><option>100+</option><option>Unknown</option></select></div>
+        <div class="field full"><label for="gaps">What is missing or frustrating about the current toolset?</label><textarea id="gaps" name="Observability gaps" placeholder="Alert noise, fragmented context, poor traceability, cost, lack of ownership…"></textarea></div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head"><div class="num">03</div><div><h2>Incidents and response workflow</h2><p>Understand the problem the product must solve first.</p></div></div>
+      <div class="grid">
+        <div class="field"><label for="frequency">How often do significant incidents occur?</label><select id="frequency" name="Incident frequency"><option value="">Select</option><option>Daily / several times a week</option><option>Weekly</option><option>Monthly</option><option>Less than monthly</option><option>Unknown</option></select></div>
+        <div class="field"><label for="mttr">Typical time to restore service</label><select id="mttr" name="Typical time to restore"><option value="">Select</option><option>Under 15 minutes</option><option>15–60 minutes</option><option>1–4 hours</option><option>More than 4 hours</option><option>Not measured</option></select></div>
+        <div class="field"><label for="diagnosis">Typical time to identify likely cause</label><select id="diagnosis" name="Time to diagnose"><option value="">Select</option><option>Under 15 minutes</option><option>15–60 minutes</option><option>1–4 hours</option><option>More than 4 hours</option><option>Not measured</option></select></div>
+        <div class="field"><label for="coverage">Who handles incidents today?</label><select id="coverage" name="Incident ownership"><option value="">Select</option><option>Dedicated SRE / platform team</option><option>Developers share on-call</option><option>Managed service provider</option><option>Founder / small team ad hoc</option><option>Other</option></select></div>
+        <div class="field full"><label for="recentincident">Walk through the most recent painful incident</label><textarea id="recentincident" name="Recent incident walkthrough" placeholder="What failed? How was it detected? What took the longest? How was recovery confirmed?"></textarea></div>
+        <div class="field full"><label for="handoffs">Where do delays or hand-offs occur?</label><textarea id="handoffs" name="Incident workflow bottlenecks" placeholder="Finding the right logs, correlating deployment changes, paging owners, approvals…"></textarea></div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head"><div class="num">04</div><div><h2>Desired AI assistance and guardrails</h2><p>Set expectations for trust, autonomy and control.</p></div></div>
+      <div class="field">
+        <span class="label">Which capabilities would be most valuable? <span class="hint">Choose up to three in discussion</span></span>
+        <div class="options">
+          <label class="choice"><input type="checkbox" name="Priority capabilities" value="Correlate alerts"><span>Correlate alerts</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Root-cause hypotheses"><span>Root-cause hypotheses</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Evidence from logs and traces"><span>Evidence from logs / traces</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Deployment correlation"><span>Deployment correlation</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Runbook recommendations"><span>Runbook recommendations</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Postmortem generation"><span>Postmortem generation</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="SLO / error budget insights"><span>SLO / error budget insights</span></label><label class="choice"><input type="checkbox" name="Priority capabilities" value="Approved recovery actions"><span>Approved recovery actions</span></label>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:16px">
+        <div class="field"><label for="autonomy">Acceptable autonomy level</label><select id="autonomy" name="Acceptable autonomy"><option value="">Select</option><option>Read-only investigation and recommendations</option><option>Prepare actions for human approval</option><option>Execute pre-approved low-risk actions</option><option>Not decided</option></select></div>
+        <div class="field"><label for="trust">What evidence would make an AI diagnosis trustworthy?</label><input id="trust" name="Trust requirements" placeholder="Source links, confidence, reproducible queries…"></div>
+        <div class="field full"><label for="security">Security, privacy or compliance requirements</label><textarea id="security" name="Security requirements" placeholder="Data residency, SOC 2 requirements, PII redaction, retention, SSO…"></textarea></div>
+      </div>
+    </section>
+    <section>
+      <div class="section-head"><div class="num">05</div><div><h2>Buying process and success criteria</h2><p>Validate urgency, budget and what a successful pilot means.</p></div></div>
+      <div class="grid">
+        <div class="field"><label for="urgency">Priority / timing</label><select id="urgency" name="Priority and timing"><option value="">Select</option><option>Actively evaluating now</option><option>Within 1–3 months</option><option>Within 3–6 months</option><option>Exploratory only</option></select></div>
+        <div class="field"><label for="budget">Potential monthly budget (USD)</label><select id="budget" name="Potential monthly budget"><option value="">Select</option><option>Under $150</option><option>$150–$399</option><option>$400–$999</option><option>$1,000–$2,500</option><option>$2,500+</option><option>Not yet defined</option></select></div>
+        <div class="field"><label for="approval">Who approves a purchase?</label><input id="approval" name="Purchase approver" placeholder="Founder, CTO, procurement…"></div>
+        <div class="field"><label for="alternatives">What alternatives are being considered?</label><input id="alternatives" name="Alternatives considered" placeholder="Current tools, competitors, internal build…"></div>
+        <div class="field full"><label for="success">What would a successful 30-day pilot prove?</label><textarea id="success" name="Pilot success criteria" placeholder="Faster diagnosis, fewer escalations, reduced on-call burden, trusted evidence…"></textarea></div>
+        <div class="field full"><label for="notes">Additional notes / assumptions to validate</label><textarea id="notes" name="Additional notes" placeholder="Open questions, constraints, stakeholders, follow-up actions…"></textarea></div>
+      </div>
+    </section>
+    <div class="actions">
+      <button class="btn primary" type="button" id="export">Export answers (.json)</button>
+      <button class="btn secondary" type="button" id="print">Print / save as PDF</button>
+      <button class="btn secondary" type="reset">Clear form</button>
+    </div>
+    <div id="status" class="status" role="status">Your assessment export has been prepared.</div>
+    <p class="note">Privacy note: this standalone form does not send answers to a server. Export the file and store it securely according to your client's data-handling requirements.</p>
+  </form>
+</main>
+<script>
+const form=document.getElementById('assessment'), inputs=[...form.querySelectorAll('input,select,textarea')];
+function updateProgress(){const filled=inputs.filter(el=>el.type==='checkbox'?el.checked:el.value.trim()!=='').length;const pct=Math.round(filled/inputs.length*100);document.getElementById('progressBar').style.width=pct+'%';document.getElementById('progressText').textContent=pct+'% complete';}
+form.addEventListener('input',updateProgress);form.addEventListener('change',updateProgress);
+function collect(){const out={form:'SRE SaaS Client Reliability Assessment',exportedAt:new Date().toISOString(),answers:{}};const names=[...new Set(inputs.map(el=>el.name).filter(Boolean))];names.forEach(name=>{const group=inputs.filter(el=>el.name===name);if(group[0].type==='checkbox'){out.answers[name]=group.filter(el=>el.checked).map(el=>el.value)}else{out.answers[name]=group[0].value.trim()}});return out;}
+document.getElementById('export').addEventListener('click',()=>{const data=collect();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sre-saas-client-assessment-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);const s=document.getElementById('status');s.style.display='block';s.textContent='Assessment exported. Save it securely and use it to shape the client-specific demo.';});
+document.getElementById('print').addEventListener('click',()=>window.print());form.addEventListener('reset',()=>setTimeout(updateProgress,0));updateProgress();
+</script>
+</body></html>
