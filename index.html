@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="SRE SaaS — explore an AI-assisted, cloud-agnostic approach to incident investigation and reliability operations.">
+  <title>SRE SaaS — Reliability, with more context</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(19, 30, 49, .82);
+      --panel-solid: #131e31;
+      --line: rgba(171, 192, 225, .16);
+      --text: #f4f7fb;
+      --muted: #aab7cc;
+      --blue: #83b7ff;
+      --cyan: #83e4df;
+      --purple: #b9a5ff;
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 15% 5%, rgba(56, 105, 190, .22), transparent 36rem),
+        radial-gradient(ellipse at 88% 28%, rgba(54, 173, 167, .12), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 25px 0; }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 750; letter-spacing: -.03em; }
+    .logo {
+      width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px;
+      background: linear-gradient(135deg, #8abaff, #7be1d8); color: #081222; font-size: 20px; font-weight: 900;
+      box-shadow: 0 8px 28px rgba(109, 177, 244, .2);
+    }
+    .nav-note { color: var(--muted); font-size: 13px; }
+    .hero { padding: 76px 0 64px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; padding: 7px 12px; border: 1px solid var(--line);
+      border-radius: 999px; background: rgba(255,255,255,.035); color: #c8d9f3; font-size: 12px; font-weight: 700;
+      letter-spacing: .09em; text-transform: uppercase;
+    }
+    .dot { width: 7px; height: 7px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 12px rgba(131,228,223,.75); }
+    h1 { max-width: 850px; margin: 25px 0 20px; font-size: clamp(42px, 7vw, 76px); line-height: 1.04; letter-spacing: -.065em; }
+    .gradient { background: linear-gradient(100deg, #f6f8ff 8%, #9cc6ff 52%, #83e4df 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .intro { max-width: 700px; color: var(--muted); font-size: clamp(17px, 2.2vw, 20px); }
+    .actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px;
+      padding: 0 20px; border-radius: 13px; text-decoration: none; font-size: 14px; font-weight: 750;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: #e9f2ff; color: #0b1424; box-shadow: 0 10px 28px rgba(116, 171, 245, .15); }
+    .btn-secondary { border: 1px solid rgba(180, 203, 239, .25); background: rgba(255,255,255,.035); color: var(--text); }
+    .micro { color: #8798b2; font-size: 12px; margin-top: 15px; }
+    .preview { margin: 20px 0 80px; position: relative; }
+    .preview-shell {
+      border: 1px solid rgba(168, 194, 233, .2); border-radius: 24px; overflow: hidden;
+      background: linear-gradient(145deg, rgba(23, 37, 60, .94), rgba(12, 20, 34, .96));
+      box-shadow: 0 30px 100px rgba(0,0,0,.28);
+    }
+    .windowbar { height: 48px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 7px; padding: 0 17px; }
+    .windowdot { width: 8px; height: 8px; border-radius: 50%; background: #5c6c84; }
+    .windowlabel { margin-left: 8px; color: #8192ad; font-size: 11px; letter-spacing: .08em; }
+    .mock { display: grid; grid-template-columns: 190px 1fr; min-height: 320px; }
+    .sidebar { padding: 24px 15px; border-right: 1px solid var(--line); background: rgba(3, 9, 18, .2); }
+    .sidehead { color: #e6eefc; font-size: 12px; font-weight: 750; margin: 0 0 22px 8px; }
+    .sideitem { color: #899bb7; padding: 9px 10px; margin: 3px 0; border-radius: 8px; font-size: 11px; }
+    .sideitem.active { color: #eaf3ff; background: rgba(126, 176, 255, .13); border: 1px solid rgba(126, 176, 255, .12); }
+    .mockmain { padding: 25px; min-width: 0; }
+    .mocktitle { font-size: 17px; font-weight: 750; letter-spacing: -.02em; }
+    .mocksub { color: #8fa1bd; font-size: 11px; margin-top: 2px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+    .metric { padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.025); }
+    .metric-label { color: #91a1bb; font-size: 10px; }
+    .metric-num { margin-top: 5px; font-size: 23px; font-weight: 800; letter-spacing: -.04em; }
+    .metric-foot { font-size: 10px; color: var(--cyan); }
+    .incident { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; margin-top: 9px; }
+    .incident-title { font-size: 11px; font-weight: 700; }
+    .incident-meta { color: #91a1bb; font-size: 10px; margin-top: 3px; }
+    .status { white-space: nowrap; font-size: 9px; padding: 4px 7px; border-radius: 6px; color: #ffd29b; background: rgba(239, 165, 80, .12); border: 1px solid rgba(239,165,80,.16); }
+    .status.blue { color: #9fc8ff; background: rgba(100, 161, 255, .12); border-color: rgba(100,161,255,.18); }
+    .section { padding: 0 0 80px; }
+    .section-head { max-width: 680px; margin-bottom: 25px; }
+    h2 { font-size: clamp(28px, 4vw, 42px); letter-spacing: -.045em; line-height: 1.15; margin: 0 0 12px; }
+    .section-head p { color: var(--muted); margin: 0; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .card { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 23px; }
+    .card-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: rgba(131,183,255,.11); color: var(--blue); font-size: 19px; margin-bottom: 18px; }
+    .card h3 { font-size: 16px; margin: 0 0 8px; letter-spacing: -.02em; }
+    .card p { color: var(--muted); font-size: 14px; margin: 0; }
+    .cta { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: center; border: 1px solid rgba(131,183,255,.22); border-radius: 24px; padding: clamp(24px, 5vw, 44px); background: linear-gradient(120deg, rgba(59, 95, 157, .17), rgba(43, 129, 124, .09)); margin-bottom: 80px; }
+    .cta p { color: var(--muted); margin-bottom: 0; }
+    .cta-actions { display: grid; gap: 11px; }
+    .cta-actions .btn { width: 100%; }
+    .fineprint { font-size: 11px; color: #8292aa; margin-top: 14px; }
+    footer { border-top: 1px solid var(--line); padding: 24px 0 32px; color: #8190a8; font-size: 12px; }
+    footer .footrow { display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+    @media (max-width: 760px) {
+      .hero { padding: 52px 0 42px; }
+      .mock { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .mockmain { padding: 17px; }
+      .metrics { gap: 7px; }
+      .metric { padding: 10px; }
+      .metric-num { font-size: 19px; }
+      .cards { grid-template-columns: 1fr; }
+      .cta { grid-template-columns: 1fr; }
+      .nav-note { display: none; }
+    }
+    @media (max-width: 420px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      .btn { width: 100%; }
+      .metrics { grid-template-columns: 1fr; }
+      .metric { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .metric-num { margin-top: 0; }
+      .metric-foot { display: none; }
+      .incident { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#" aria-label="SRE SaaS home">
+        <span class="logo">S</span>
+        <span>SRE SaaS</span>
+      </a>
+      <div class="nav-note">An early concept · Looking for practitioner feedback</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow"><span class="dot"></span> Explore the concept</div>
+      <h1>Less time chasing signals.<br><span class="gradient">More time restoring service.</span></h1>
+      <p class="intro">SRE SaaS is an early concept for a cloud-agnostic, AI-assisted reliability workspace that helps engineering teams bring incident context, investigation, and remediation planning together — while continuing to use the observability tools they already rely on.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="sre-saas-clickable-demo.html">Explore the clickable demo <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-secondary" href="sre-saas-client-assessment.html">Take the discovery assessment <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="micro">A product concept in validation. The current demo uses simulated data and does not connect to live systems.</p>
+    </section>
+
+    <section class="preview wrap" aria-label="Illustrative product preview">
+      <div class="preview-shell">
+        <div class="windowbar"><span class="windowdot"></span><span class="windowdot"></span><span class="windowdot"></span><span class="windowlabel">SRE SAAS / RELIABILITY OVERVIEW</span></div>
+        <div class="mock">
+          <aside class="sidebar">
+            <div class="sidehead">SRE SaaS</div>
+            <div class="sideitem active">◈ &nbsp; Overview</div>
+            <div class="sideitem">◉ &nbsp; Incident inbox</div>
+            <div class="sideitem">⌕ &nbsp; Investigations</div>
+            <div class="sideitem">⇄ &nbsp; Integrations</div>
+            <div class="sideitem">▤ &nbsp; Reports</div>
+          </aside>
+          <div class="mockmain">
+            <div class="mocktitle">Reliability overview</div>
+            <div class="mocksub">Illustrative workspace · Sample incident data</div>
+            <div class="metrics">
+              <div class="metric"><div><div class="metric-label">Active incidents</div><div class="metric-num">04</div><div class="metric-foot">2 need attention</div></div></div>
+              <div class="metric"><div><div class="metric-label">Mean time to resolve</div><div class="metric-num">28m</div><div class="metric-foot">Illustrative metric</div></div></div>
+              <div class="metric"><div><div class="metric-label">Services monitored</div><div class="metric-num">32</div><div class="metric-foot">Sample environment</div></div></div>
+            </div>
+            <div class="incident">
+              <div><div class="incident-title">Checkout API latency spike</div><div class="incident-meta">INC-2048 · Payments · 8 minutes ago</div></div>
+              <span class="status">Investigating</span>
+            </div>
+            <div class="incident">
+              <div><div class="incident-title">Elevated error rate — order service</div><div class="incident-meta">INC-2047 · Orders · 21 minutes ago</div></div>
+              <span class="status blue">Correlating</span>
+            </div>
+            <div class="incident">
+              <div><div class="incident-title">Queue depth above threshold</div><div class="incident-meta">INC-2046 · Messaging · 34 minutes ago</div></div>
+              <span class="status">Needs review</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>A layer across the tools you already use.</h2>
+        <p>The hypothesis: teams need more than another dashboard. They need a clearer path from alert to evidence, shared understanding, and a safe next action.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon">⌕</div>
+          <h3>Investigate with context</h3>
+          <p>Bring incident timelines, relevant signals, and investigation notes into one workflow instead of switching between disconnected views.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">⌘</div>
+          <h3>Work with your stack</h3>
+          <p>Explore a cloud-agnostic approach designed to complement existing observability and incident-management platforms, not replace them.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">↗</div>
+          <h3>Plan safer remediation</h3>
+          <p>Turn evidence into explainable next steps, with human review and appropriate approval gates before any production action.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="cta">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> Help shape the product</div>
+          <h2 style="margin-top:18px">Built around real SRE problems.</h2>
+          <p>I'm looking to speak with SRE practitioners, DevOps and platform engineering leaders, and engineering decision-makers — especially teams operating in the US market. Your feedback will help validate the problem, priorities, and willingness to pay before deeper product development.</p>
+          <div class="fineprint">Please don't include credentials, customer data, or sensitive production details in the assessment.</div>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="sre-saas-clickable-demo.html">1. Try the product concept ↗</a>
+          <a class="btn btn-secondary" href="sre-saas-client-assessment.html">2. Share your challenges →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footrow">
+      <span>© <span id="year"></span> SRE SaaS · Early-stage product exploration</span>
+      <span>Concept demo only — no live monitoring or remediation is performed.</span>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
